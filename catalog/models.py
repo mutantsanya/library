@@ -1,6 +1,15 @@
 from django.db import models
 from django.urls import reverse
 import uuid
+from random import randint
+from django.db.models import Max
+from django.utils.text import slugify
+from time import time
+
+
+def gen_slug(s):
+    new_slug = slugify(s, allow_unicode=True)
+    return new_slug + '-' + str(int(time()))
 
 
 class Author(models.Model):
@@ -9,6 +18,7 @@ class Author(models.Model):
     """
     first_name = models.CharField('имя', max_length=70)
     second_name = models.CharField('фамилия', max_length=70)
+    about = models.TextField('об авторе', max_length=1000, blank=True, null=True)
     email = models.EmailField('email', blank=True, null=True)
     date_of_birth = models.DateField('дата рождения', blank=True, null=True)
     date_of_death = models.DateField('дата смерти', blank=True, null=True)
@@ -24,7 +34,7 @@ class Author(models.Model):
         """
         return the url to a particular author
         """
-        return reverse('author-detail', args=[str(self.id)])
+        return reverse('catalog:author_detail_url', kwargs={'id': str(self.id)})
 
     class Meta:
         """
@@ -54,6 +64,7 @@ class Book(models.Model):
     """
     title = models.CharField(max_length=150, help_text='Введите название книги',
                              verbose_name='название')
+    slug = models.SlugField(max_length=150, blank=True, unique=True, allow_unicode=True)
     author = models.ManyToManyField(Author, verbose_name='автор')
     summary = models.TextField(max_length=1000, help_text='Введите краткое описание книги',
                                verbose_name='описание')
@@ -94,10 +105,24 @@ class Book(models.Model):
         """
         return the url to access a particular book instance
         """
-        return reverse('book-detail', args=[str(self.id)])
+        return reverse('catalog:book_detail_url', kwargs={'slug': str(self.slug)})
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = gen_slug(self.title)
+        return super().save(*args, **kwargs)
 
     class Meta:
         ordering = ('title',)
+
+
+def get_random_book():
+    max_id = Book.objects.all().aggregate(max_id=Max('id'))['max_id']
+    while True:
+        pk = randint(1, max_id)
+        book = Book.objects.filter(pk=pk).first()
+        if book:
+            return book
 
 
 class Language(models.Model):
@@ -138,7 +163,8 @@ class Publisher(models.Model):
         """
         get access url to a particular publisher
         """
-        return reverse('publisher-detail', args=[str(self.id)])
+        return reverse('catalog:publisher_detail_url', kwargs={'id': str(self.id)})
+
 
 
 class BookInstance(models.Model):
@@ -146,9 +172,10 @@ class BookInstance(models.Model):
     model representing a specific copy of a book
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                          help_text='Уникальный ID для конкретного экземпляра книги в библиотеке', auto_created=True)
-    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
-    due_back = models.DateField(null=True, blank=True)
+                          help_text='Уникальный ID для конкретного экземпляра книги в библиотеке',
+                          auto_created=True, verbose_name='UUID', editable=False)
+    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, verbose_name='книга')
+    due_back = models.DateField('дата возврата', null=True, blank=True)
 
     LOAN_STATUS = (
         ('m', 'Тех. обслуживание'),
@@ -158,7 +185,7 @@ class BookInstance(models.Model):
     )
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='m',
-                              help_text='Доступность книги')
+                              help_text='Доступность книги', verbose_name='статус')
 
     def __str__(self):
         return '{} {}'.format(self.id, self.book.title)

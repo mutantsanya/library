@@ -5,7 +5,7 @@ from .models import *
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('second_name', 'first_name', 'email', 'date_of_birth', 'date_of_death')
-    fields = ('first_name', 'second_name', 'email', ('date_of_birth', 'date_of_death',),)
+    fields = ('first_name', 'second_name', 'about', 'email', ('date_of_birth', 'date_of_death',),)
 
 
 class BookInstanceInline(admin.TabularInline):

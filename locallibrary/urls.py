@@ -5,8 +5,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
-    path('catalog/', include('catalog.urls'))
+    path('admin/', admin.site.urls),
+    path('catalog/', include('catalog.urls')),
+    path('social/', include('social_django.urls', namespace="social"))
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)

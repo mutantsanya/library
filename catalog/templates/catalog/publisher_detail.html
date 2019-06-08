@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ publisher.name }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ publisher.name }}</h1>
+
+    <p><strong>Адрес:</strong> {{ publisher.address }}</p>
+    <p><strong>Штат/область:</strong> {{ publisher.state_province }}</p>
+    <p><strong>Город:</strong> {{ publisher.city }}</p>
+    <p><strong>Страна:</strong> {{ publisher.country }}</p>
+    {% if publisher.url %}
+        <p><strong>Сайт:</strong> {{ publisher.url }}</p>
+    {% endif %}
+
+    {% if publisher.book_set.all %}
+        <p><strong>Книги:</strong>
+        <ul>
+            {% for book in publisher.book_set.all %}
+                <li><a href="{{ book.get_absolute_url }}">{{ book }}</a></li>
+            {% endfor %}
+        </ul>
+        </p>
+    {% endif %}
+
+
+{% endblock %}

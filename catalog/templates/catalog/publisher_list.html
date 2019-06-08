@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Список издателей
+{% endblock %}
+
+{% block content %}
+    <h1>Издатели:</h1>
+    {% if publisher_list %}
+        <ul>
+            {% for publisher in publisher_list %}
+                <li>
+                    <a href="{{ publisher.get_absolute_url }}">{{ publisher.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет ни одного издательства!</p>
+    {% endif %}
+{% endblock %}
