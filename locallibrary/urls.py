@@ -8,6 +8,9 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
-    path('social/', include('social_django.urls', namespace="social"))
+    path('social/', include('social_django.urls', namespace="social")),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Local Library{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <!-- Добавление дополнительного статического CSS файла -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-2">
+            {% block sidebar %}
+
+                <ul class="sidebar-nav">
+                    <li><a href="{% url 'catalog:index_url' %}">Главная</a></li>
+                    <li><a href="{% url 'catalog:books_url' %}">Все книги</a></li>
+                    <li><a href="{% url 'catalog:genres_url' %}">Жанры</a></li>
+                    <li><a href="{% url 'catalog:authors_url' %}">Авторы</a></li>
+                    <li><a href="{% url 'catalog:publishers_url' %}">Издатели</a></li>
+
+                </ul>
+                {% if user.is_authenticated %}
+                    <p>Здравствуйте, {{ request.user.username | truncatechars:15 }}</p>
+                    <a href="{% url 'catalog:my_borrowed_url' %}">Мои книги</a><br>
+                    <a href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                    Вы не авторизированы. <br>
+                    <a href="{% url 'login' %}" %}">Регистрация</a> |
+                    <a href="{% url 'login' %}" %}">Войти</a><br>
+                    <br>
+                    <p>Войти с помощью соцсети</p>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}"> <img src="{% static "img/google.png" %}" alt="google auth"> </a>
+                    <a href="{% url 'social:begin' 'github' %}"> <img src="{% static "img/github.png" %}" alt="github auth"> </a>
+                    <a href="{% url 'social:begin' 'vk-oauth2' %}"> <img src="{% static "img/vk.png" %}" alt="vk auth">
+                    </a>
+
+                {% endif %}
+
+                {% if perms.catalog.can_mark_returned %}
+                    <br>
+                    <ul class="sidebar-nav">
+                        Персонал
+                        <li><a href="{% url 'catalog:borrowed_all_url' %}">Взятые книги</a></li>
+                        <li><a href="{% url 'catalog:users_url' %}">Пользователи</a></li>
+
+
+                    </ul>
+                {% endif %}
+            {% endblock %}
+        </div>
+        <div class="col-sm-10 ">
+            {% block content %}{% endblock %}
+
+        </div>
+    </div>
+
+</div>
+
+{% block pagination %}
+    {% if user.is_authenticated %}
+        {% if is_paginated %}
+            <div class="pagination justify-content-center">
+              <span class="page-links">
+                  {% if page_obj.has_previous %}
+                      <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                  {% endif %}
+                  <span class="page-current">
+                      Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                  </span>
+                  {% if page_obj.has_next %}
+                      <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a>
+                  {% endif %}
+              </span>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+</body>
+</html>

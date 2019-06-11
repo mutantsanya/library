@@ -5,16 +5,24 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Авторы:</h1>
-    {% if author_list %}
-        <ul>
-            {% for author in author_list %}
-                <li>
-                    <a href="{{ author.get_absolute_url }}">{{ author.second_name }}, {{ author.first_name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Нет ни одного автора!</p>
-    {% endif %}
+    <div style="alignment: center; margin: 15px">
+        {% if user.is_authenticated %}
+            <h1>Авторы:</h1>
+                        <h1>{{ author.first_name }} {{ author.second_name }}</h1>
+            {% if perms.catalog.can_mark_returned %}
+                <p><a href="{% url 'catalog:author_create_url' %}">Создать</a></p>
+            {% endif %}
+            {% if author_list %}
+                <ul>
+                    {% for author in author_list %}
+                        <li>
+                            <a href="{{ author.get_absolute_url }}">{{ author.second_name }}, {{ author.first_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Нет ни одного автора!</p>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

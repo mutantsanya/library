@@ -5,27 +5,47 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ author.first_name }} {{ author.second_name }}</h1>
+    <div style="alignment: center; margin: 15px">
+        {% if user.is_authenticated %}
 
-    <p><strong>Дата рождения:</strong> {{ author.date_of_birth }}</p>
+            <h1>{{ author.first_name }} {{ author.second_name }}</h1>
+            {% if perms.catalog.can_mark_returned %}
+                <p><a href="{% url 'catalog:author_update_url' author.pk %}">Изменить</a> |
+                <a href="{% url 'catalog:author_delete_url' author.pk %}">Удалить</a></p>
+            {% endif %}
 
-    {% if author.date_of_death %}
-        <p><strong>Дата смерти:</strong> {{ author.date_of_death }}</p>
-    {% endif %}
+            
+            {% if author.photo %}
+                <img src="{{ author.photo.url }}" alt="{{ author.second_name }}">
+            {% endif %}
 
-    <p><strong>Об авторе:</strong> {{ author.about }}</p>
-    {% if author.email %}
-        <p><strong>Почта:</strong> {{ author.email }}</p>
-    {% endif %}
+            {% if author.date_of_birth %}
+            <p><strong>Дата рождения:</strong> {{ author.date_of_birth }}</p>
+            {% endif %}
+
+            {% if author.date_of_death %}
+                <p><strong>Дата смерти:</strong> {{ author.date_of_death }}</p>
+            {% endif %}
+
+            {% if author.about %}
+            <p><strong>Об авторе:</strong> {{ author.about | linebreaksbr }}</p>
+            {% endif %}
+
+            {% if author.email %}
+                <p><strong>Почта:</strong> {{ author.email }}</p>
+            {% endif %}
 
 
-    <p><strong>Книги:</strong>
-        <ol>
-        {% for book in author.book_set.all %}
-        <li><a href="{{ book.get_absolute_url }}">{{ book }}</a> ({{ book.bookinstance_set.all.count }})</li>
-            {{ book.summary }}
-        {% endfor %}
-        </ol>
-    </p>
+            <p><strong>Книги:</strong>
+            <ol>
+                {% for book in author.book_set.all %}
+                    <li><a href="{{ book.get_absolute_url }}">{{ book }}</a> ({{ book.bookinstance_set.all.count }})
+                    </li>
+                    {{ book.summary }}
+                {% endfor %}
+            </ol>
+            </p>
 
+        {% endif %}
+    </div>
 {% endblock %}

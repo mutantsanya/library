@@ -119,6 +119,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.instagram.InstagramOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.vk.VKOAuth2',
 )
 
 
@@ -144,6 +145,10 @@ STATIC_URL = '/static/'
 #     os.path.join(BASE_DIR, "static"),
 # ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 #встроенное поле jsonb для хранения извлеченных доп данных
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
@@ -151,5 +156,17 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/catalog/'
 LOGOUT_REDIRECT_URL = "/catalog/"
 
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 SOCIAL_AUTH_GITHUB_KEY = '6d273109501818ba5b37'
 SOCIAL_AUTH_GITHUB_SECRET = 'a2f8787ac234532e7b52ae0e5f23eba9b44cb693'
+
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7014560'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SPANnTz6cDlEJ0snY7yz'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '161073832166-vvlb5tlp2621sbo8a5chf29lj6p6uoes.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Y9KAsr44pRAnjOLQRr3mFkfl'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

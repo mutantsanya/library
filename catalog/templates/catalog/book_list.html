@@ -5,16 +5,32 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Книги в нашей библиотеке:</h1>
-    {% if book_list %}
-        <ul>
-            {% for book in book_list %}
-                <li>
-                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>: {{ book.author.first }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>На данный момент, книги в библиотеке отсутствуют</p>
-    {% endif %}
+    <div style="alignment: center; margin: 15px">
+        {% if user.is_authenticated %}
+            <h1>Книги в нашей библиотеке:</h1>
+            {% if book_list %}
+                <ul>
+                    {% for book in book_list %}
+                        <li>
+                            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> |
+
+                            {% for author in book.author.all %}
+                                {% if forloop.last %}
+                                    <a href="{{ author.get_absolute_url }}" style="color: black">
+                                    {{ author.first_name }} {{ author.second_name }}</a>
+                                    {% else %}
+                                    <a href="{{ author.get_absolute_url }}" style="color: black">
+                                    {{ author.first_name }} {{ author.second_name }},</a>
+                                {% endif %}
+
+
+                            {% endfor %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>На данный момент, книги в библиотеке отсутствуют</p>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

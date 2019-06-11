@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div style="alignment: center; margin: 15px">
+        <h1>Пользователь - {{ user.get_username }}</h1>
+        {% if user.is_authenticated %}
+            <ul>
+                <p><strong>Имя:</strong> {{ user.get_full_name }}</p>
+                <p><strong>Группа:</strong> {{ user.groups.all.first }}</p>
+                <p><strong>Был онлайн:</strong> {{ user.last_login }}</p>
+                <p><strong>Дата регистрации:</strong> {{ user.date_joined }}</p>
+                <p><strong>Персонал:</strong> {{ user.is_staff }}</p>
+                {% if user.email %}
+                    <p><strong>Электронная почта:</strong> {{ user.email }}</p>
+                {% endif %}
+            </ul>
+            <h2>Взятые книги</h2>
+            <ol>
+            {% for bookinst in user.bookinstance_set.all %}
+                <li class={% if bookinst.is_overdue %}"text-danger"{% endif %}><p><strong><a href="{{ bookinst.book.get_absolute_url }}">{{ bookinst.book.title }}:</a></strong> {{ bookinst.due_back }}</p></li>
+            {% endfor %}
+            </ol>
+
+        {% endif %}
+    </div>
+
+
+{% endblock %}

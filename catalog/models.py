@@ -5,6 +5,8 @@ from random import randint
 from django.db.models import Max
 from django.utils.text import slugify
 from time import time
+from django.contrib.auth.models import User
+from datetime import date
 
 
 def gen_slug(s):
@@ -22,6 +24,7 @@ class Author(models.Model):
     email = models.EmailField('email', blank=True, null=True)
     date_of_birth = models.DateField('дата рождения', blank=True, null=True)
     date_of_death = models.DateField('дата смерти', blank=True, null=True)
+    photo = models.ImageField('фото', blank=True, null=True, upload_to='authors_img', )
 
     def __str__(self):
         """
@@ -56,6 +59,9 @@ class Genre(models.Model):
         string for representing the model object
         """
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('catalog:genre_detail_url', kwargs={'name': self.name})
 
 
 class Book(models.Model):
@@ -166,7 +172,6 @@ class Publisher(models.Model):
         return reverse('catalog:publisher_detail_url', kwargs={'id': str(self.id)})
 
 
-
 class BookInstance(models.Model):
     """
     model representing a specific copy of a book
@@ -186,9 +191,27 @@ class BookInstance(models.Model):
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='m',
                               help_text='Доступность книги', verbose_name='статус')
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='заёмщик')
 
     def __str__(self):
         return '{} {}'.format(self.id, self.book.title)
 
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
+
     class Meta:
         ordering = ('due_back',)
+        permissions = (('can_mark_returned', 'Set book as returned'),)
+
+
+class Users(User):
+    def get_absolute_url(self):
+        return reverse('catalog:user_detail_url', kwargs={'username': self.username})
+
+    class Meta:
+        permissions = (('can_lookup_users', 'Get list of all users'),)
+
+

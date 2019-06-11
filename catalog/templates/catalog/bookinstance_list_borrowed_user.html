@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="alignment: center; margin: 15px">
+        <h1> Взятые в аренду книги</h1>
+
+        {% if bookinstance_list %}
+            <ul>
+                {% for bookinst in bookinstance_list %}
+                    <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+                        <a href="{% url 'catalog:book_detail_url' bookinst.book.slug %}"> {{ bookinst.book.title }}</a>
+                        ({{ bookinst.due_back }})
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Вы еще не брали книг.</p>
+        {% endif %}
+    </div>
+{% endblock %}

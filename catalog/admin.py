@@ -5,7 +5,7 @@ from .models import *
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('second_name', 'first_name', 'email', 'date_of_birth', 'date_of_death')
-    fields = ('first_name', 'second_name', 'about', 'email', ('date_of_birth', 'date_of_death',),)
+    fields = ('first_name', 'second_name', 'about', 'email', ('date_of_birth', 'date_of_death',), 'photo')
 
 
 class BookInstanceInline(admin.TabularInline):
@@ -23,16 +23,16 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('book', 'id', 'status', 'due_back')
+    list_display = ('book', 'status', 'borrower', 'due_back')
     search_fields = ('book',)
-    sortable_by = ('book', 'status', 'due_back')
+    sortable_by = ('book', 'status', 'due_back', 'borrower',)
     list_filter = ('status', 'due_back',)
 
     fieldsets = (
         (None,
-         {'fields': ('book', 'id',)}),
+         {'fields': ('book',)}),
         ('Доступность',
-         {'fields': ('status', 'due_back',)}))
+         {'fields': ('status', 'due_back', 'borrower',)}))
 
 
 @admin.register(Publisher)
