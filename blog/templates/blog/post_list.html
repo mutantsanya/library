@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Blog
+{% endblock %}
+
+{% block content %}
+    <div style="alignment: center; margin: 15px">
+        {% if user.is_authenticated %}
+            {% if post_list %}
+                {% for post in post_list %}
+
+                    <div class="card bg-light mb-3" style="max-width: 36rem;">
+                        <div class="card-header"><strong>{{ post.author | title }}</strong> | {{ post.pub_date }}
+                            {% if request.user.is_authenticated and perms.catalog.can_mark_returned %}
+                                <a href="{% url 'blog:post_delete_url' post.slug %}"
+                                   class="btn btn-outline-danger button_on_post"
+                                   style="float: right;">X</a>
+                                <a href="{% url 'blog:post_update_url' post.slug %}"
+                                   class="btn btn btn-outline-primary button_on_post"
+                                   style="float: right;">R</a>
+
+                            {% endif %}
+                        </div>
+                        <div class="card-body bg-light">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.body|truncatechars:200|linebreaksbr }}</p>
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-outline-info">Читать</a>
+                        </div>
+                        <div class="card-footer text-dark">
+
+                            Тэги:
+                            {% for tag in post.tags.all %}
+
+                                {% if forloop.last %}
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+
+                                {% else %}
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>,
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

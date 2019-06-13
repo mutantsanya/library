@@ -32,6 +32,21 @@ def index(request):
     return render(request, 'catalog/index.html', context)
 
 
+@permission_required('catalog.can_mark_returned')
+def renew_bookinst(request, pk):
+    book_inst = get_object_or_404(BookInstance, pk=pk)
+    if request.method == 'POST':
+        form = RenewBookForm(request.POST)
+        if form.is_valid():
+            book_inst.due_back = form.cleaned_data['due_back']
+            book_inst.save()
+            return HttpResponseRedirect(reverse('catalog:borrowed_all_url'))
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = RenewBookForm(initial={'due_back': proposed_renewal_date,})
+    return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
+
+
 class BookListView(LoginRequiredMixin, generic.ListView):
     model = Book
     paginate_by = 15
@@ -110,36 +125,80 @@ class GenreDetailView(LoginRequiredMixin, generic.DetailView):
     slug_url_kwarg = 'name'
 
 
-class AuthorCreate(generic.CreateView):
+class AuthorCreate(PermissionRequiredMixin, generic.CreateView):
     model = Author
     fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
 
 
-class AuthorUpdate(generic.UpdateView):
+class AuthorUpdate(PermissionRequiredMixin, generic.UpdateView):
     model = Author
     fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
 
 
-class AuthorDelete(generic.DeleteView):
+class AuthorDelete(PermissionRequiredMixin, generic.DeleteView):
     model = Author
     success_url = reverse_lazy('catalog:authors_url')
     template_name_suffix = '_delete'
+    permission_required = 'catalog.can_mark_returned'
 
 
+class GenreCreate(PermissionRequiredMixin, generic.CreateView):
+    model = Genre
+    fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
+    success_url = reverse_lazy('catalog:genres_url')
 
 
+class GenreUpdate(PermissionRequiredMixin, generic.UpdateView):
+    model = Genre
+    fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
 
 
-@permission_required('catalog.can_mark_returned')
-def renew_bookinst(request, pk):
-    book_inst = get_object_or_404(BookInstance, pk=pk)
-    if request.method == 'POST':
-        form = RenewBookForm(request.POST)
-        if form.is_valid():
-            book_inst.due_back = form.cleaned_data['due_back']
-            book_inst.save()
-            return HttpResponseRedirect(reverse('catalog:borrowed_all_url'))
-    else:
-        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewBookForm(initial={'due_back': proposed_renewal_date,})
-    return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
+class GenreDelete(PermissionRequiredMixin, generic.DeleteView):
+    model = Genre
+    success_url = reverse_lazy('catalog:genres_url')
+    template_name_suffix = '_delete'
+    permission_required = 'catalog.can_mark_returned'
+
+
+class PublisherCreate(PermissionRequiredMixin, generic.CreateView):
+    model = Publisher
+    fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
+    success_url = reverse_lazy('catalog:publishers_url')
+
+
+class PublisherUpdate(PermissionRequiredMixin, generic.UpdateView):
+    model = Publisher
+    fields = ('name', 'url',)
+    permission_required = 'catalog.can_mark_returned'
+
+
+class PublisherDelete(PermissionRequiredMixin, generic.DeleteView):
+    model = Publisher
+    template_name_suffix = '_delete'
+    permission_required = 'catalog.can_mark_returned'
+    success_url = reverse_lazy('catalog:publishers_url')
+
+
+class BookCreate(PermissionRequiredMixin, generic.CreateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
+    success_url = reverse_lazy('catalog:books_url')
+
+
+class BookUpdate(PermissionRequiredMixin, generic.UpdateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.can_mark_returned'
+
+
+class BookDelete(PermissionRequiredMixin, generic.DeleteView):
+    model = Book
+    success_url = reverse_lazy('catalog:books_url')
+    template_name_suffix = '_delete'
+    permission_required = 'catalog.can_mark_returned'

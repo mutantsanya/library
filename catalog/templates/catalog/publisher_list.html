@@ -8,6 +8,9 @@
     <div style="alignment: center; margin: 15px">
         {% if user.is_authenticated %}
             <h1>Издатели:</h1>
+            {% if perms.catalog.can_mark_returned %}
+                <p><a href="{% url 'catalog:publisher_create_url' %}">Создать</a></p>
+            {% endif %}
             {% if publisher_list %}
                 <ul>
                     {% for publisher in publisher_list %}

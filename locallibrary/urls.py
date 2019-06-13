@@ -10,7 +10,9 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('social/', include('social_django.urls', namespace="social")),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('blog/', include('blog.urls')),
 ]
+
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

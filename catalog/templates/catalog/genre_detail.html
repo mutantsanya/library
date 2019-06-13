@@ -8,6 +8,10 @@
     <div style="alignment: center; margin: 15px">
         {% if user.is_authenticated %}
             <h1>Жанр: {{ genre.name }}</h1>
+            {% if perms.catalog.can_mark_returned %}
+                <p><a href="{% url 'catalog:genre_update_url' genre.id %}">Изменить</a> |
+                <a href="{% url 'catalog:genre_delete_url' genre.id %}">Удалить</a></p>
+            {% endif %}
             {% if genre.book_set.count > 0 %}
                 <ul>
                     {% for book in genre.book_set.all %}

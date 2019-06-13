@@ -25,3 +25,21 @@ urlpatterns += [
     path('author/<str:pk>/update', views.AuthorUpdate.as_view(), name='author_update_url'),
     path('author/<str:pk>/delete', views.AuthorDelete.as_view(), name='author_delete_url'),
 ]
+
+urlpatterns += {
+    path('genres/create/', views.GenreCreate.as_view(), name='genre_create_url'),
+    path('genre/<str:pk>/update', views.GenreUpdate.as_view(), name='genre_update_url'),
+    path('genre/<str:pk>/delete', views.GenreDelete.as_view(), name='genre_delete_url'),
+}
+
+urlpatterns += {
+    path('publishers/create/', views.PublisherCreate.as_view(), name='publisher_create_url'),
+    path('publisher/<str:pk>/update', views.PublisherUpdate.as_view(), name='publisher_update_url'),
+    path('publisher/<str:pk>/delete', views.PublisherDelete.as_view(), name='publisher_delete_url'),
+}
+
+urlpatterns += [
+    path('books/create/', views.BookCreate.as_view(), name='book_create_url'),
+    path('book/<str:slug>/update', views.BookUpdate.as_view(), name='book_update_url'),
+    path('book/<str:slug>/delete', views.BookDelete.as_view(), name='book_delete_url'),
+]

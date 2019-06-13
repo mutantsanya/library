@@ -17,6 +17,7 @@
                     {% for author in author_list %}
                         <li>
                             <a href="{{ author.get_absolute_url }}">{{ author.second_name }}, {{ author.first_name }}</a>
+                            ({{ author.book_set.all.count }} books)
                         </li>
                     {% endfor %}
                 </ul>

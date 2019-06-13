@@ -8,6 +8,9 @@
     <div style="alignment: center; margin: 15px">
         {% if user.is_authenticated %}
             <h1>Книги в нашей библиотеке:</h1>
+            {% if perms.catalog.can_mark_returned %}
+                <a href="{% url 'catalog:book_create_url' %}">Создать</a><br><br>
+            {% endif %}
             {% if book_list %}
                 <ul>
                     {% for book in book_list %}

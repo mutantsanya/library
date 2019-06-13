@@ -8,6 +8,11 @@
     <div style="alignment: center; margin: 15px">
         {% if user.is_authenticated %}
             <h1>{{ publisher.name }}</h1>
+            
+            {% if perms.catalog.can_mark_returned %}
+                <p><a href="{% url 'catalog:publisher_update_url' publisher.pk %}">Изменить</a> |
+                    <a href="{% url 'catalog:publisher_delete_url' publisher.pk %}">Удалить</a></p>
+            {% endif %}
 
             <p><strong>Адрес:</strong> {{ publisher.address }}</p>
             <p><strong>Штат/область:</strong> {{ publisher.state_province }}</p>

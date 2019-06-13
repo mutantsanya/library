@@ -3,12 +3,15 @@
 {% block content %}
     {% if user.is_authenticated %}
         <h1>{{ book.title }}</h1>
-
+        {% if perms.catalog.can_mark_returned %}
+            <p><a href="{% url 'catalog:book_update_url' book.slug %}">Изменить</a> |
+                <a href="{% url 'catalog:book_delete_url' book.slug %}">Удалить</a></p>
+        {% endif %}
         <p><strong>Автор:</strong>
             {% for author in book.author.all %}
                 {% if forloop.last %}
-                <a href="{{ author.get_absolute_url }}">{{ author }}</a>
-                    {% else %}
+                    <a href="{{ author.get_absolute_url }}">{{ author }}</a>
+                {% else %}
                     <a href="{{ author.get_absolute_url }}">{{ author }}</a>,
                 {% endif %}
             {% endfor %}
@@ -20,15 +23,23 @@
         <p><strong>Жанр:</strong> {% for genre in book.genre.all %}
             <a href="{{ genre.get_absolute_url }}">{{ genre }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 
-        <div style="margin-left:20px;margin-top:20px">
+        {% if book.bookinstance_set.all.count > 0 %}
+            <div style="margin-left:20px;margin-top:20px">
             <h4>Экземпляры</h4>
 
-            {% for copy in book.bookinstance_set.all %}
+            {% for copy in book.bookinstance_set.all%}
                 <hr>
                 <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'd' %}text-danger{% else %}text-warning{% endif %}">{{ copy.get_status_display }}</p>
-                {% if copy.status != 'a' %}<p><strong>Дата возвращения:</strong> {{ copy.due_back }}</p>{% endif %}
+                {% if copy.status != 'a' %}<p><strong>Дата возвращения:</strong> {{ copy.due_back }}</p>
+                    <p><strong>Заёмщик:</strong> <a
+                            href="{% url 'catalog:user_detail_url' copy.borrower.username %}">{{ copy.borrower | title }}</a>
+                    </p>{% endif %}
+
+
                 <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+
             {% endfor %}
-        </div>
+        {% endif %}
+    </div>
     {% endif %}
 {% endblock %}

@@ -1,0 +1,29 @@
+<div class="card bg-light mb-3" style="max-width: 36rem;">
+    <div class="card-header">
+        <strong>{{ post.author | title }} </strong> | {{ post.pub_date }}
+
+    </div>
+
+    <div class="card-body bg-light">
+        <h5 class="card-title">
+            <font size="+2">{{ post.title|title }}</font><br></h5>
+
+        <p class="card-text card_detail">{{ post.body|linebreaksbr }}</p>
+    </div>
+
+    <div class="card-footer text-dark">
+        Тэги:
+        {% for tag in post.tags.all %}
+
+            {% if forloop.last %}
+                <a href="">{{ tag.name }}</a>
+
+            {% else %}
+                <a href="">{{ tag.name }},</a>
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+</div>
+
