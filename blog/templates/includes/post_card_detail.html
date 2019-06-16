@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="card bg-light mb-3" style="max-width: 36rem;">
     <div class="card-header">
         <strong>{{ post.author | title }} </strong> | {{ post.pub_date }}
@@ -6,15 +8,15 @@
                style="float: right;">X</a>
             <a href="{% url 'blog:post_update_url' post.slug %}" class="btn btn btn-outline-primary button_on_post"
                style="float: right;">R</a>
-
         {% endif %}
+
     </div>
 
     <div class="card-body bg-light">
         <h5 class="card-title">
             <font size="+2">{{ post.title|title }}</font><br></h5>
 
-        <p class="card-text card_detail">{{ post.body|linebreaksbr }}</p>
+        <p class="card-text card_detail">{{ post.body | linebreaksbr }}</p>
     </div>
 
     <div class="card-footer text-dark">
@@ -32,23 +34,52 @@
 
     </div>
 </div>
-{% if post.comment_set.all %}
-    <div style="justify-content: center">Комментарии: {{ post.comment_set.all.count }}</div><br>
+{% if post.comments.all %}
+    <div class="accordion" id="accordionExample" style="max-width: 37rem;">
+  <div>
+    <div class="card bg-light mb-3" id="headingOne" style="max-width: 36rem;">
+      <h5 class="m-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          Комментарии: {{ post.comments_amount }}
+        </button>
+      </h5>
+    </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+           {% for com in post.comments.all %}
 
-    {% for comment in post.comment_set.all %}
-        {% if comment.on_post %}
-            <div class="card bg-light mb-3" style="max-width: 36rem;">
-            <div class="card-header">{{ comment.author }} | {{ comment.pub_date }}</div>
-            <div class="card-body">
-                <h5 class="card-title">{{ comment.title | title }}</h5>
-                <p class="card-text">{{ comment.body }}</p>
-            </div>
+        {% include 'includes/post_comments.html' with com=com %}
 
-
-            {{ comment.on_comment.author }}
-
-
-        {% endif %}
     {% endfor %}
+      </div>
+    </div>
+  </div>
 
+
+
+{% else %}
+    <div style="max-width: 36rem;">
+        <p>Комментариев пока нет. Ваш может быть первым!</p>
+    </div>
+
+{% endif %}
+{% if request.user.is_authenticated %}
+
+{% else %}
+    <div class="card-body bg-light" style="max-width: 36rem; outline: black">
+        <p>Комментарии могут оставлять только зарегистрированные пользователи! </p>
+        <p><a href="{% url 'catalog:register_url' %}" %}">Зарегистрируйтесь</a> или <a href="{% url 'login' %}" %}">войдите</a>, чтобы
+            оставлять комментарии.</p>
+
+
+        <div>
+            <p>Вы так же можете войти с помощью соцсети</p>
+            <a href="{% url 'social:begin' 'google-oauth2' %}">
+                <img src="{% static "img/google.png" %}" alt="google auth"></a>
+            <a href="{% url 'social:begin' 'github' %}">
+                <img src="{% static "img/github.png" %}" alt="github auth"> </a>
+            <a href="{% url 'social:begin' 'vk-oauth2' %}">
+                <img src="{% static "img/vk.png" %}" alt="vk auth"></a>
+        </div>
+    </div>
 {% endif %}

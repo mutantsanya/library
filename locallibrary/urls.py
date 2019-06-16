@@ -11,6 +11,7 @@ urlpatterns = [
     path('social/', include('social_django.urls', namespace="social")),
     path('accounts/', include('django.contrib.auth.urls')),
     path('blog/', include('blog.urls')),
+    path('__debug__/', include('debug_toolbar.toolbar')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)

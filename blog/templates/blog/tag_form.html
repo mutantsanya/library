@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="alignment: center; margin: 15px">
+        <h1>Создание\изменение тега - {{ tag.name }} </h1>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Подтвердить">
+        </form>
+    </div>
+{% endblock %}

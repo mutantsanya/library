@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
@@ -202,3 +203,16 @@ class BookDelete(PermissionRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy('catalog:books_url')
     template_name_suffix = '_delete'
     permission_required = 'catalog.can_mark_returned'
+
+
+class RegistrationFormView(generic.edit.FormView):
+    form_class = UserCreationForm
+    success_url = ""
+    template_name = 'registration/register.html'
+
+    def form_valid(self, form):
+        form.save()
+        return super(RegistrationFormView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('login')

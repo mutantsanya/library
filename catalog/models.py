@@ -123,12 +123,15 @@ class Book(models.Model):
 
 
 def get_random_book():
-    max_id = Book.objects.all().aggregate(max_id=Max('id'))['max_id']
-    while True:
-        pk = randint(1, max_id)
-        book = Book.objects.filter(pk=pk).first()
-        if book:
-            return book
+    try:
+        max_id = Book.objects.all().aggregate(max_id=Max('id'))['max_id']
+        while True:
+            pk = randint(1, max_id)
+            book = Book.objects.filter(pk=pk).first()
+            if book:
+                return book
+    except TypeError:
+        return 'Книг нет'
 
 
 class Language(models.Model):

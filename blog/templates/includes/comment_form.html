@@ -1,0 +1,34 @@
+<div style="alignment: center; margin: 15px" style="max-width: 36rem;">
+    {% ifnotequal comm_id None %}
+        <form id='add_comm_form' method='post' action='{% url 'blog:add_comment_url' %}'>
+            {% csrf_token %}
+
+            <input type='hidden' name='post_id' value='{{ post.id }}'>
+            <input type='hidden' name='slug' value=''>
+            <input type='hidden' name='comm_id' value='{{ com.id }}'>
+
+            <div class="form-group">
+                <input name='text_comm' type="text" required class="form-control" placeholder="Текст ответа">
+                <small class="form-text text-muted">Форма для ввода ответа на комментарий.</small>
+                <button type="submit" class="btn btn-primary" style="float: right">Ответить</button>
+            </div>
+
+        </form>
+    {% else %}
+        <form id='add_comm_form' method='post' action='{% url 'blog:add_comment_url' %}'>
+            {% csrf_token %}
+
+            <input type='hidden' name='post_id' value='{{ post.id }}'>
+            <input type='hidden' name='slug' value='{{ post.slug }}'>
+            <input type='hidden' name='comm_id' value=''>
+
+            <div class="form-group" style="max-width: 35rem;">
+                <input name='text_comm' type="text" required class="form-control" placeholder="Текст комментария" maxlength="500" width="48">
+                <small class="form-text text-muted">Форма для ввода комментария.</small>
+                <button type="submit" class="btn btn-primary" style="float: right">Комментировать</button>
+            </div>
+
+        </form>
+    {% endifnotequal %}
+
+</div>

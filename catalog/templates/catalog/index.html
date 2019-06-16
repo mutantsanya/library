@@ -18,7 +18,9 @@
         <li><strong>Экземпляров доступно:</strong> {{ num_instances_available }}</li>
         <li><strong>Авторов:</strong> {{ num_authors }}</li>
         <li><strong>Жанров:</strong> {{ num_genres }}</li>
+        {% if num_books > 0 %}
         <li><strong><a href="{{ rand_book.get_absolute_url }}">Случайная книга</a></strong></li>
+        {% endif %}
         <br>
         {% if num_visits != 0%}
             <p>Вы посетили эту страницу {{ num_visits }} раз</p>

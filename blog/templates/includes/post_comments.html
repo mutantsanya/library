@@ -1,0 +1,49 @@
+<div style="justify-content: center">
+
+    <div class="card bg-light mb-3 {% if com.on_post %} {% else %}ml-5{% endif %}" style="max-width: 36rem;">
+        <div class="card-header">Комент от {{ com.author }} | {{ com.pub_date }}
+
+
+            {% if request.user.is_authenticated and perms.catalog.can_mark_returned %}
+                <a href="{% url 'blog:comment_delete_url' com.pk %}" class="btn btn-outline-danger button_on_post"
+                   style="float: right;">X</a>
+                <a href="{% url 'blog:comment_update_url' com.pk %}" class="btn btn btn-outline-primary button_on_post"
+                   style="float: right;">R</a>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+                <a href="#multiCollapseExample{{ com.id }}" class="btn btn btn-outline-primary" data-toggle="collapse"
+                   role="button" aria-expanded="false" aria-controls="multiCollapseExample{{ com.id }}" style="float: right;">Q</a>
+            {% endif %}
+            {% if com.on_comment.pk %}
+                <br>Ответ пользователю <strong>{{ com.on_comment.author.username | truncatechars:10 }}</strong>
+            {% endif %}
+        </div>
+
+        <div class="card-body">
+            <p class="card-text">{{ com.body | linebreaksbr }}</p>
+
+            <div class="row">
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample{{ com.id }}">
+
+                        {% if request.user.is_authenticated %}
+                            {% include 'includes/comment_form.html' with comm_id=1 %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div style="max-width: 36rem;">
+        {% for com in com.get_comments %}
+            {% with coms=com.get_comments %}
+                {% include 'includes/post_comments.html' %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+

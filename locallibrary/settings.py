@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'social_django',
     'blog.apps.BlogConfig',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'locallibrary.urls'
@@ -82,7 +84,7 @@ WSGI_APPLICATION = 'locallibrary.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'library',
+        'NAME': 'library2',
         'USER': 'postgres',
         'PASSWORD': 1,
         'HOST': '127.0.0.1',
@@ -171,3 +173,5 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '161073832166-vvlb5tlp2621sbo8a5chf29lj6p6uoes.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Y9KAsr44pRAnjOLQRr3mFkfl'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+INTERNAL_IPS = '127.0.0.1'

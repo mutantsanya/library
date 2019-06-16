@@ -6,7 +6,6 @@
 
 {% block content %}
     <div style="alignment: center; margin: 15px">
-        {% if user.is_authenticated %}
             {% if post_list %}
                 {% for post in post_list %}
 
@@ -45,8 +44,8 @@
 
 
                 {% endfor %}
-
+            {% else %}
+                <h3>На данный момент, записи отсутствуют</h3>
             {% endif %}
-        {% endif %}
     </div>
 {% endblock %}

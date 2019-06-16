@@ -37,6 +37,7 @@
                     <li><a href="{% url 'catalog:publishers_url' %}">Издатели</a></li>
                     <li><a href="{% url 'blog:post_list_url' %}">Блог</a></li>
                     <li style="padding: 0px 20px; "><a href="{% url 'blog:post_create_url' %}">Создать запись</a></li>
+                    <li style="padding: 0px 20px; "><a href="{% url 'blog:tag_create_url' %}">Создать тэг</a></li>
 
                 </ul>
                 {% if user.is_authenticated %}

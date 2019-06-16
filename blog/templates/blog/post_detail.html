@@ -7,5 +7,7 @@
 {% block content %}
     <div style="alignment: center; margin: 15px">
         {% include 'includes/post_card_detail.html' %}
-    </div>
+    {% if request.user.is_authenticated %}
+        {% include 'includes/comment_form.html' %}
+    {% endif %}
 {% endblock %}

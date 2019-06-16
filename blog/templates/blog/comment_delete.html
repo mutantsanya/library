@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="alignment: center; margin: 15px">
+        <h1>Удаление комментария</h1>
+        <p>Вы уверены, что хотите удалить комментарий:</p>
+        <p><strong>{{ comment.body }}</strong>?</p>
+        <p>Комментариев связано с ним: <strong> {{ comment.get_comments.count }} </strong></p>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Да, удалить">
+        </form>
+    </div>
+{% endblock %}
