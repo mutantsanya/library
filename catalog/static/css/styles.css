@@ -13,3 +13,78 @@ body {
     background-color: rgba(255, 119, 0, 0);
 }
 
+
+
+
+/* TAGS */
+
+.tags {
+  width: 650px;
+  color: #ffffff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 2.0em;
+}
+
+.tags a {
+  white-space: nowrap;
+  /* Style for "Rounded Re" */
+  width: auto;
+  border-radius: 13px;
+  background-color: #2e56ff;
+  padding: 5px 10px 5px 10px;
+  text-decoration: none;
+  color: #ffffff;
+
+  position: relative; /* для подсказки */
+}
+
+/* это нужно, если есть необходимость что бы можно было навести курсор на подсказку. Иначе будет исчезать */
+.tags a:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 20px;
+  visibility: hidden;
+}
+
+.tags a:hover {
+  background: #eb1f63;
+}
+
+/* оформление плашки */
+.tags__hide {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #000;
+  background: #fbf8ff;
+  padding: 5px 10px;
+  line-height: 1;
+  transition: all .3s;
+
+  /* параметры для изчезновения/появления */
+  visibility: hidden;
+  opacity: 5%;
+  bottom: 150px;
+}
+.tags a:hover .tags__hide {
+  visibility: visible;
+  opacity: 1;
+  bottom: calc(100% + 15px);
+}
+/* треугольник */
+.tags__hide:before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  margin-left: -5px;
+  transform: rotate(45deg)
+}

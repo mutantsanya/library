@@ -148,30 +148,45 @@ STATIC_URL = '/static/'
 #     os.path.join(BASE_DIR, "static"),
 # ]
 
+# path to the media folder
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-#встроенное поле jsonb для хранения извлеченных доп данных
+# встроенное поле jsonb для хранения извлеченных доп данных
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
 LOGIN_URL = 'login'
+# redirect after login and logout on the main page
 LOGIN_REDIRECT_URL = '/catalog/'
 LOGOUT_REDIRECT_URL = "/catalog/"
 
+
+# namespace for social_auth app
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
+
+# GITHUB authentication variables
 SOCIAL_AUTH_GITHUB_KEY = '6d273109501818ba5b37'
 SOCIAL_AUTH_GITHUB_SECRET = 'a2f8787ac234532e7b52ae0e5f23eba9b44cb693'
 
 
+# VK authentication variables
 SOCIAL_AUTH_VK_OAUTH2_KEY = '7014560'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SPANnTz6cDlEJ0snY7yz'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
+
+# Google authentication variables
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '161073832166-vvlb5tlp2621sbo8a5chf29lj6p6uoes.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Y9KAsr44pRAnjOLQRr3mFkfl'
 
+
+# for getting mail in our console instead of sending it somewhere
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
+# internal ips for our debug-toolbar
+# it is a list of IP adresses that allow the debug()
+# context processor to add some variables to the template context
 INTERNAL_IPS = '127.0.0.1'

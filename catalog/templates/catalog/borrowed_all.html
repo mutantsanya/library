@@ -3,22 +3,28 @@
 {% block content %}
 
     <div style="alignment: center; margin: 15px">
-        <h1>Арендованые книги</h1>
+        <h1>Арендованные книги</h1>
         {% if user.is_authenticated %}
             <ul>
-                {% for bookinst in bookinstance_list %}
-                    {% if bookinst.borrower %}
-                        <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
-                            <a href="{{ bookinst.book.get_absolute_url }}">{{ bookinst.book.title }}</a>
-                            ( {{ bookinst.due_back }} ) -
-                            <a href="{% url 'catalog:user_detail_url' bookinst.borrower.username %}">{{ bookinst.borrower | truncatechars:15}}</a>
-                            {% if perms.catalog.can_mark_returned %}
-                            <a href="{% url 'catalog:renew_bookinst_url' bookinst.pk %}" style="color: black">(Изменить)</a>
+                {% if bookinstance_list %}
+                    {% for bookinst in bookinstance_list %}
+                        {% if bookinst.borrower %}
+                            <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+                                <a href="{{ bookinst.book.get_absolute_url }}">{{ bookinst.book.title }}</a>
+                                ( {{ bookinst.due_back }} ) -
+                                <a href="{% url 'catalog:user_detail_url' bookinst.borrower.username %}">
+                                    {{ bookinst.borrower | truncatechars:15 }}</a>
+                                {% if perms.catalog.can_mark_returned %}
+                                    <a href="{% url 'catalog:renew_bookinst_url' bookinst.pk %}" style="color: black">(Изменить)</a>
+                                {% endif %}
+                            </li>
                         {% endif %}
-                        </li>
-                    {% endif %}
 
-                {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <p>Нет ни одной арендованной книги на данный момент!</p>
+                    <p>Быть может, не стоит так жадничать?</p>
+                {% endif %}
             </ul>
         {% endif %}
     </div>

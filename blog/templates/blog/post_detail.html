@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{ post.title }}
+    {{ post.title }} - {{ block.super }}
 {% endblock %}
 
 {% block content %}
     <div style="alignment: center; margin: 15px">
         {% include 'includes/post_card_detail.html' %}
-    {% if request.user.is_authenticated %}
-        {% include 'includes/comment_form.html' %}
-    {% endif %}
+        {% if request.user.is_authenticated %}
+            {% include 'includes/comment_form.html' %}
+        {% endif %}
+    </div>
 {% endblock %}

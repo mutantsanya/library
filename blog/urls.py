@@ -5,9 +5,10 @@ app_name = 'blog'
 
 urlpatterns = [
     path('', views.PostList.as_view(), name='post_list_url'),
-    path('crate/tag', views.TagCreate.as_view(), name='tag_create_url'),
+    path('tags/', views.TagList.as_view(), name='tag_list_url'),
+    path('create/tag', views.TagCreate.as_view(), name='tag_create_url'),
     path('create/post', views.PostCreate.as_view(), name='post_create_url'),
-    path('add_comment/', views.add_comment, name='add_comment_url'),
+    path('create/comment/', views.add_comment, name='add_comment_url'),
     path('update_comment/<str:pk>', views.CommentUpdate.as_view(), name='comment_update_url'),
     path('del_comment/<str:pk>', views.CommentDelete.as_view(), name='comment_delete_url'),
     path('post/<str:slug>/', views.PostDetail.as_view(), name='post_detail_url'),

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Список тегов - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div style="alignment: center; margin: 15px; max-width: 36rem;">
+        <h3>Список всех тегов:</h3>
+
+        <div class="tags">
+            {% for tag in tag_list %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}
+                    <span class="tags__hide">Все посты с тегом <strong>{{ tag.name | title }}</strong></span></a>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
