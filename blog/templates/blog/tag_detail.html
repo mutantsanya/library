@@ -7,8 +7,11 @@
 {% block content %}
     <div style="alignment: center; margin: 15px">
         {% if user.is_authenticated %}
-                <h3>Записи с тегом <strong>{{ tag.name }}</strong></h3><br>
-                {% for post in tag.posts.all %}
+                <h3>Записи с тегом <strong>{{ tag.name }}</strong></h3>
+                <a href="{% url 'blog:tag_update_url' tag.slug %}">Изменить</a> |
+                <a href="{% url 'blog:tag_delete_url' tag.slug %}">Удалить</a>
+
+                <p>{% for post in tag.posts.all %}</p>
 
                     <div class="card bg-light mb-3" style="max-width: 36rem;">
                         <div class="card-header"><strong>{{ post.author | title }}</strong> | {{ post.pub_date }}

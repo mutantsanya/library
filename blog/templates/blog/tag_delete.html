@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="alignment: center; margin: 15px">
+        <h1>Удаление тега</h1>
+        <p>Вы уверены, что хотите удалить тег: <strong>{{ tag.name }}</strong>?</p>
+
+        {% if tag.posts.count > 0 %}
+            <p>Некоторые записи всё еще ссылаются на него : <strong>{{ tag.posts.count }}</strong></p>
+        {% endif %}
+
+
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <p><input type="submit" value="Да, удалить" class="btn btn-primary"></p>
+        </form>
+    </div>
+{% endblock %}

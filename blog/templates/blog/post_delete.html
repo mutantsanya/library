@@ -4,13 +4,13 @@
     <div style="alignment: center; margin: 15px">
         <h1>Удаление записи</h1>
         <p>Вы уверены, что хотите удалить запись: <strong>{{ post.title }}</strong>?</p>
-        {% if post.comments_amount > 0  %}
-        <p>Связанные комментарии так же будут удалены: <strong>{{ post.comments_amount }}</strong></p>
+        {% if post.comments_amount > 0 %}
+            <p>Связанные комментарии так же будут удалены: <strong>{{ post.comments_amount }}</strong></p>
         {% endif %}
 
         <form action="" method="post">
             {% csrf_token %}
-            <input type="submit" value="Да, удалить">
+            <p><input type="submit" value="Да, удалить" class="btn btn-primary"></p>
         </form>
     </div>
 {% endblock %}
