@@ -8,7 +8,8 @@
             <input type='hidden' name='comm_id' value='{{ com.id }}'>
 
             <div class="form-group">
-                <input name='text_comm' type="text" required class="form-control" placeholder="Текст ответа">
+                <input name='text_comm' type="text" required class="form-control" placeholder="Текст ответа"
+                maxlength="500">
                 <small class="form-text text-muted">Форма для ввода ответа на комментарий.</small>
 
                 <button type="submit" class="btn btn-primary" style="float: right">Ответить</button>
