@@ -7,37 +7,39 @@
 {% block content %}
     <div style="alignment: center; margin: 15px">
         {% if user.is_authenticated %}
-                <h3>Записи с тегом <strong>{{ tag.name }}</strong></h3>
+            <h3>Записи с тегом <strong>{{ tag.name }}</strong></h3>
+            {% if perms.catalog.can_mark_returned %}
                 <a href="{% url 'blog:tag_update_url' tag.slug %}">Изменить</a> |
                 <a href="{% url 'blog:tag_delete_url' tag.slug %}">Удалить</a>
+            {% endif %}
 
-                <p>{% for post in tag.posts.all %}</p>
+            <p>{% for post in tag.posts.all %}</p>
 
-                    <div class="card bg-light mb-3" style="max-width: 36rem;">
-                        <div class="card-header"><strong>{{ post.author | title }}</strong> | {{ post.pub_date }}
-                        </div>
-                        <div class="card-body bg-light">
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-text">{{ post.body|truncatechars:200|linebreaksbr }}</p>
-                            <a href="{{ post.get_absolute_url }}" class="btn btn-outline-info">Читать</a>
-                        </div>
-                        <div class="card-footer text-dark">
-
-                            Тэги:
-                            {% for tag in post.tags.all %}
-
-                                {% if forloop.last %}
-                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
-
-                                {% else %}
-                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>,
-                                {% endif %}
-                            {% endfor %}
-
-                        </div>
+                <div class="card bg-light mb-3" style="max-width: 36rem;">
+                    <div class="card-header"><strong>{{ post.author | title }}</strong> | {{ post.pub_date }}
                     </div>
+                    <div class="card-body bg-light">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.body|truncatechars:200|linebreaksbr }}</p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-outline-info">Читать</a>
+                    </div>
+                    <div class="card-footer text-dark">
+
+                        Тэги:
+                        {% for tag in post.tags.all %}
+
+                            {% if forloop.last %}
+                                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+
+                            {% else %}
+                                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>,
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
 
 
-                {% endfor %}
+            {% endfor %}
         {% endif %}
 {% endblock %}

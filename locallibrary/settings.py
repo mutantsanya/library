@@ -190,3 +190,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # it is a list of IP adresses that allow the debug()
 # context processor to add some variables to the template context
 INTERNAL_IPS = '127.0.0.1'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
